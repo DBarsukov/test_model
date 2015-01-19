@@ -8,8 +8,6 @@
 
 #import "AIDData.h"
 
-#define VALID_DATA( __data ) __data ? __data : @""
-
 #pragma mark Internal key names for dictionary
 NSString* const KeyAIDDataID            = @"cId";
 NSString* const KeyAIDDataCreated       = @"created";
@@ -38,19 +36,18 @@ NSString* const KeyAIDDataSecurityCode  = @"securityCode";
 @synthesize updated;
 @synthesize timestamp;
 
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        self.cId = @"";
-        self.created = @"";
-        self.updated = @"";
-        self.timestamp = @"";
+- ( instancetype )init{
+    self = [ super init ];
+    if( self ){
+        self.cId        = @"";
+        self.created    = @"";
+        self.updated    = @"";
+        self.timestamp  = @"";
     }
     return self;
 }
 
-- ( id )copyWithZone:(NSZone *)zone{
+- ( instancetype )copyWithZone:(NSZone *)zone{
     AIDData *copyObj = [ [ [ self class ] allocWithZone: nil ] init ];
     
     copyObj.cId         = self.cId;
@@ -83,7 +80,19 @@ NSString* const KeyAIDDataSecurityCode  = @"securityCode";
 @synthesize phone;
 @synthesize email;
 
-- ( id )copyWithZone:(NSZone *)zone{
+- ( instancetype )init{
+    self = [ super init ];
+    if( self ){
+        self.parentConsumerId   = @"";
+        self.name               = @"";
+        self.zip                = @"";
+        self.phone              = @"";
+        self.email              = @"";
+    }
+    return self;
+}
+
+- ( instancetype )copyWithZone:(NSZone *)zone{
     AIDDataConsumer *copyObj = [ super copyWithZone: zone ];
     
     copyObj.name    = self.name;
@@ -95,10 +104,10 @@ NSString* const KeyAIDDataSecurityCode  = @"securityCode";
 
 - ( NSDictionary* )dictionaryRepresentation{
     NSMutableDictionary *dictionary = [ [ NSMutableDictionary alloc ] initWithDictionary: [ super dictionaryRepresentation ] ];
-    [ dictionary addEntriesFromDictionary: @{ KeyAIDDataName:   VALID_DATA( self.name ),
-                                              KeyAIDDataZIP:    VALID_DATA( self.zip ),
-                                              KeyAIDDataPhone:  VALID_DATA( self.phone ),
-                                              KeyAIDDataEmail:  VALID_DATA( self.email ) } ];
+    [ dictionary addEntriesFromDictionary: @{ KeyAIDDataName:    self.name,
+                                              KeyAIDDataZIP:     self.zip,
+                                              KeyAIDDataPhone:   self.phone,
+                                              KeyAIDDataEmail:   self.email } ];
     return dictionary;
 }
 
@@ -110,7 +119,17 @@ NSString* const KeyAIDDataSecurityCode  = @"securityCode";
 @synthesize name;
 @synthesize active;
 
-- ( id )copyWithZone:(NSZone *)zone{
+- ( instancetype )init{
+    self = [ super init ];
+    if( self ){
+        self.name   = @"";
+        self.active = @"";
+    }
+    return self;
+}
+
+
+- ( instancetype )copyWithZone:(NSZone *)zone{
     AIDDataApplication *copyObj = [ super copyWithZone: zone ];
     
     copyObj.name    = self.name;
@@ -121,8 +140,8 @@ NSString* const KeyAIDDataSecurityCode  = @"securityCode";
 - ( NSDictionary* )dictionaryRepresentation{
     NSMutableDictionary *dictionary = [ [ NSMutableDictionary alloc ] initWithDictionary: [ super dictionaryRepresentation ] ];
     
-    [ dictionary addEntriesFromDictionary: @{ KeyAIDDataName:   VALID_DATA( self.name ),
-                                              KeyAIDDataActive: VALID_DATA( self.active ) } ];
+    [ dictionary addEntriesFromDictionary: @{ KeyAIDDataName:    self.name,
+                                              KeyAIDDataActive:  self.active } ];
     return dictionary;
 }
 
@@ -138,7 +157,21 @@ NSString* const KeyAIDDataSecurityCode  = @"securityCode";
 @synthesize os;
 @synthesize endpointArn;
 
-- ( id )copyWithZone:(NSZone *)zone{
+
+- ( instancetype )init{
+    self = [ super init ];
+    if( self ){
+        self.anchorId   = @"";
+        self.consumerId = @"";
+        self.uuid       = @"";
+        self.status     = @"";
+        self.os         = @"";
+        self.endpointArn= @"";
+    }
+    return self;
+}
+
+- ( instancetype )copyWithZone:(NSZone *)zone{
     AIDDataDevice *copyObj = [ super copyWithZone: zone ];
     
     copyObj.anchorId    = self.anchorId;
@@ -153,12 +186,12 @@ NSString* const KeyAIDDataSecurityCode  = @"securityCode";
 - ( NSDictionary* )dictionaryRepresentation{
     NSMutableDictionary *dictionary = [ [ NSMutableDictionary alloc ] initWithDictionary: [ super dictionaryRepresentation ] ];
     
-    [ dictionary addEntriesFromDictionary: @{ KeyAIDDataAnchorId:   VALID_DATA( self.anchorId ),
-                                              KeyAIDDataConsumerId: VALID_DATA( self.consumerId ),
-                                              KeyAIDDataUUID:       VALID_DATA( self.uuid ),
-                                              KeyAIDDataStatus:     VALID_DATA( self.status ),
-                                              KeyAIDDataOS:         VALID_DATA( self.os ),
-                                              KeyAIDDataEndpointArn:VALID_DATA( self.endpointArn ) } ];
+    [ dictionary addEntriesFromDictionary: @{ KeyAIDDataAnchorId:    self.anchorId,
+                                              KeyAIDDataConsumerId:  self.consumerId,
+                                              KeyAIDDataUUID:        self.uuid,
+                                              KeyAIDDataStatus:      self.status,
+                                              KeyAIDDataOS:          self.os,
+                                              KeyAIDDataEndpointArn: self.endpointArn } ];
     return dictionary;
 }
 
@@ -173,7 +206,20 @@ NSString* const KeyAIDDataSecurityCode  = @"securityCode";
 @synthesize status;
 @synthesize securityCode;
 
-- ( id )copyWithZone:(NSZone *)zone{
+
+- ( instancetype )init{
+    self = [ super init ];
+    if( self ){
+        self.recordId       = @"";
+        self.consumerId     = @"";
+        self.clientAppId    = @"";
+        self.status         = @"";
+        self.securityCode   = @"";
+    }
+    return self;
+}
+
+- ( instancetype )copyWithZone:(NSZone *)zone{
     AIDDataTransaction *copyObj = [ super copyWithZone: zone ];
     
     copyObj.recordId    = self.recordId;
@@ -187,11 +233,11 @@ NSString* const KeyAIDDataSecurityCode  = @"securityCode";
 - ( NSDictionary* )dictionaryRepresentation{
     NSMutableDictionary *dictionary = [ [ NSMutableDictionary alloc ] initWithDictionary: [ super dictionaryRepresentation ] ];
     
-    [ dictionary addEntriesFromDictionary: @{ KeyAIDDataRecordId:       VALID_DATA( self.recordId ),
-                                              KeyAIDDataConsumerId:     VALID_DATA( self.consumerId ),
-                                              KeyAIDDataClientAppId:    VALID_DATA( self.clientAppId ),
-                                              KeyAIDDataStatus:         VALID_DATA( self.status ),
-                                              KeyAIDDataSecurityCode:   VALID_DATA( self.securityCode ) } ];
+    [ dictionary addEntriesFromDictionary: @{ KeyAIDDataRecordId:        self.recordId,
+                                              KeyAIDDataConsumerId:      self.consumerId,
+                                              KeyAIDDataClientAppId:     self.clientAppId,
+                                              KeyAIDDataStatus:          self.status,
+                                              KeyAIDDataSecurityCode:    self.securityCode } ];
     return dictionary;
 }
 

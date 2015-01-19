@@ -87,7 +87,7 @@ NSString* const KeyAIDDataManagerTransactions               = @"transactions";
     for( NSDictionary *d in data ){
         AIDData *aData = [ self getAIDDataObjectForKey: key ];
         
-        [ aData dataWithDictionary: d ];
+        [ aData setDataWithDictionary: d ];
         [ DATA_OBJECT( key ) addObject: aData ];
     }
 }
@@ -105,7 +105,7 @@ NSString* const KeyAIDDataManagerTransactions               = @"transactions";
 
         if( error ) return error;
         if( IS_ARRAY( key ) ) [ self fillArrayOfObjectsForKey: key andData: data ];
-        else [ DATA_OBJECT( key ) dataWithDictionary: data ];
+        else [ DATA_OBJECT( key ) setDataWithDictionary: data ];
     }
     return error;
 }
@@ -154,6 +154,9 @@ NSString* const KeyAIDDataManagerTransactions               = @"transactions";
 - ( NSError* )fetchTransactions{
     NSError *error = nil;
     
+    if( self.transactions.count ) [ self.transactions removeAllObjects ];
+    if( self.serializedTransactions.count ) [ self.serializedTransactions removeAllObjects ];
+    error = [ self loadDataFromKeyChainStoreForKey: KeyAIDDataManagerSerializedTransactions ];
     return error;
 }
 
@@ -180,13 +183,19 @@ NSString* const KeyAIDDataManagerTransactions               = @"transactions";
 - ( NSError* )storeDevice{
     NSError *error = nil;
     
-    return [ self saveDataToKeyChainStoreForKey: KeyAIDDataManagerDevice ];
+    error = [ self saveDataToKeyChainStoreForKey: KeyAIDDataManagerDevice ];
     return error;
 }
 
 - ( NSError* )storeTransactions{
     NSError *error = nil;
     
+    //////////////////////////////////////////////////////////////////////////////////
+    // Converting to array of dictionaries
+    //
+    if( self.serializedTransactions.count ) [ self.serializedTransactions removeAllObjects ];
+    for( id a in self.transactions ) [ self.serializedTransactions addObject: [ a dictionaryRepresentation ] ];
+    error = [ self saveDataToKeyChainStoreForKey: KeyAIDDataManagerTransactions ];
     return error;
 }
 

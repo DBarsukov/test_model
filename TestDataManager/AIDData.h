@@ -43,7 +43,7 @@ FOUNDATION_EXTERN NSString* const KeyAIDDataSecurityCode;
 @property ( nonatomic ) NSString    *updated;
 @property ( nonatomic ) NSString    *timestamp;
 
-- ( id )copyWithZone:(NSZone *)zone;
+- ( instancetype )copyWithZone:(NSZone *)zone;
 - ( NSDictionary* )dictionaryRepresentation;
 - ( void )setDataWithDictionary: ( NSDictionary* )dictionary; // !!! method does not validate passed dictionary
 
