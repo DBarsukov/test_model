@@ -45,7 +45,7 @@ FOUNDATION_EXTERN NSString* const KeyAIDDataSecurityCode;
 
 - ( id )copyWithZone:(NSZone *)zone;
 - ( NSDictionary* )dictionaryRepresentation;
-- ( void )dataWithDictionary: ( NSDictionary* )dictionary; // !!! method does not validate passed dictionary
+- ( void )setDataWithDictionary: ( NSDictionary* )dictionary; // !!! method does not validate passed dictionary
 
 @end
 

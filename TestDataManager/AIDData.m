@@ -38,6 +38,18 @@ NSString* const KeyAIDDataSecurityCode  = @"securityCode";
 @synthesize updated;
 @synthesize timestamp;
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        self.cId = @"";
+        self.created = @"";
+        self.updated = @"";
+        self.timestamp = @"";
+    }
+    return self;
+}
+
 - ( id )copyWithZone:(NSZone *)zone{
     AIDData *copyObj = [ [ [ self class ] allocWithZone: nil ] init ];
     
@@ -49,13 +61,13 @@ NSString* const KeyAIDDataSecurityCode  = @"securityCode";
 }
 
 - ( NSDictionary* )dictionaryRepresentation{
-    return @{ KeyAIDDataID:         VALID_DATA( self.cId ),
-              KeyAIDDataCreated:    VALID_DATA( self.created ),
-              KeyAIDDataUpdated:    VALID_DATA( self.updated ),
-              KeyAIDDataTimeStamp:  VALID_DATA( self.timestamp ) };
+    return @{ KeyAIDDataID:          self.cId ,
+              KeyAIDDataCreated:     self.created ,
+              KeyAIDDataUpdated:     self.updated ,
+              KeyAIDDataTimeStamp:   self.timestamp  };
 }
 
-- ( void )dataWithDictionary: ( NSDictionary* )dictionary{
+- ( void )setDataWithDictionary: ( NSDictionary* )dictionary{
     for( NSString *key in dictionary )
         [ self setValue: [ dictionary valueForKey: key ] forKey: key ];
 }
@@ -83,7 +95,6 @@ NSString* const KeyAIDDataSecurityCode  = @"securityCode";
 
 - ( NSDictionary* )dictionaryRepresentation{
     NSMutableDictionary *dictionary = [ [ NSMutableDictionary alloc ] initWithDictionary: [ super dictionaryRepresentation ] ];
-    
     [ dictionary addEntriesFromDictionary: @{ KeyAIDDataName:   VALID_DATA( self.name ),
                                               KeyAIDDataZIP:    VALID_DATA( self.zip ),
                                               KeyAIDDataPhone:  VALID_DATA( self.phone ),
