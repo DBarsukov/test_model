@@ -68,7 +68,6 @@ NSString* const KeyAIDDataManagerSerializedTransactions     = @"serializedTransa
 
 #pragma mark Keychain save/load
 #define DATA_OBJECT( __k )  [ self valueForKey: __k ]
-// not safe but it work for yet
 #define IS_ARRAY( __k ) [ DATA_OBJECT( __k ) isKindOfClass: [ NSMutableArray class ] ]
 
 - ( AIDData* )getAIDDataObjectForKey: ( NSString* )key{
