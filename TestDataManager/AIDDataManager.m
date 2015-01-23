@@ -12,7 +12,7 @@
 NSString *const AIDKeyChainService = @"com.anchoridTest";
 
 #pragma mark Errors
-NSInteger const ErrorAIDDataManagerKeyChainEmptyCode   = 101;
+NSInteger const ErrorAIDDataManagerKeyChainEmptyCode    = 101;
 NSString* const ErrorAIDDataManagerKeyChainEmpty        = @"Keychain are empty";
 
 #pragma mark Constants for internal key names in Keychain store
@@ -20,8 +20,8 @@ NSString* const KeyAIDDataManagerConsumer                   = @"consumer";
 NSString* const KeyAIDDataManagerApplications               = @"applications";
 NSString* const KeyAIDDataManagerSerializedApplications     = @"serializedApplications";
 NSString* const KeyAIDDataManagerDevice                     = @"device";
-NSString* const KeyAIDDataManagerSerializedTransactions     = @"serializedTransactions";
 NSString* const KeyAIDDataManagerTransactions               = @"transactions";
+NSString* const KeyAIDDataManagerSerializedTransactions     = @"serializedTransactions";
 
 #pragma mark Private~
 @interface AIDDataManager(){
@@ -67,23 +67,24 @@ NSString* const KeyAIDDataManagerTransactions               = @"transactions";
 }
 
 #pragma mark Keychain save/load
-#define IS_ARRAY( __k )     ( [ __k isEqual: KeyAIDDataManagerSerializedApplications ] || [ __k isEqual: KeyAIDDataManagerSerializedTransactions ] )
 #define DATA_OBJECT( __k )  [ self valueForKey: __k ]
+// not safe but it work for yet
+#define IS_ARRAY( __k ) [ DATA_OBJECT( __k ) isKindOfClass: [ NSMutableArray class ] ]
 
 - ( AIDData* )getAIDDataObjectForKey: ( NSString* )key{
     //////////////////////////////////////////////////////////////////////////////////
     // for future use
     //
     AIDData *aData = [ key isEqual: KeyAIDDataManagerApplications ] ? [ AIDDataApplication new ] : [ AIDDataTransaction new ];
+    
     return aData;
 }
 
-- ( void )fillArrayOfObjectsForKey: ( NSString* )key andData: ( NSArray* )data{
+- ( void )fillArrayOfObjectsForKey: ( NSString* )key withData: ( NSArray* )data{
     //////////////////////////////////////////////////////////////////////////////////
     // key map from serialized array
     //
     key = [ key isEqual: KeyAIDDataManagerSerializedApplications ] ? KeyAIDDataManagerApplications : KeyAIDDataManagerTransactions;
-
     for( NSDictionary *d in data ){
         AIDData *aData = [ self getAIDDataObjectForKey: key ];
         
@@ -104,7 +105,7 @@ NSString* const KeyAIDDataManagerTransactions               = @"transactions";
         id data = [ NSJSONSerialization JSONObjectWithData: jsonData options: NSJSONReadingMutableContainers error: &error ];
 
         if( error ) return error;
-        if( IS_ARRAY( key ) ) [ self fillArrayOfObjectsForKey: key andData: data ];
+        if( IS_ARRAY( key ) ) [ self fillArrayOfObjectsForKey: key withData: data ];
         else [ DATA_OBJECT( key ) setDataWithDictionary: data ];
     }
     return error;

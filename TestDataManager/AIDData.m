@@ -29,6 +29,8 @@ NSString* const KeyAIDDataClientAppId   = @"clientAppId";
 NSString* const KeyAIDDataSecurityCode  = @"securityCode";
 
 #pragma mark AIDData
+NSString* const BaseClassName = @"AIDData";
+
 @implementation AIDData
 
 @synthesize cId;
@@ -57,11 +59,29 @@ NSString* const KeyAIDDataSecurityCode  = @"securityCode";
     return copyObj;
 }
 
+- ( NSDictionary* )getDictionary: ( NSString* )className{
+    const char          *pszClassName   = [ className cStringUsingEncoding: [ NSString defaultCStringEncoding ] ];
+    u_int               uCount          = 0;
+    objc_property_t     *properties     = class_copyPropertyList( objc_getClass( pszClassName ), &uCount );
+    NSMutableDictionary *dictionary     = [ [ NSMutableDictionary alloc ] initWithCapacity: uCount ];
+    
+    for( u_int i = 0; i < uCount; i++ ){
+        NSString *key   = [ NSString stringWithUTF8String: property_getName( properties[ i ] ) ];
+        NSString *value = [ self valueForKey: key ];
+        
+        if( value ) [ dictionary setObject: value forKey: key ];
+    }
+    free( properties );
+    return dictionary;
+}
+
 - ( NSDictionary* )dictionaryRepresentation{
-    return @{ KeyAIDDataID:          self.cId ,
-              KeyAIDDataCreated:     self.created ,
-              KeyAIDDataUpdated:     self.updated ,
-              KeyAIDDataTimeStamp:   self.timestamp  };
+    NSString            *className  = NSStringFromClass( [ self class ] );
+    NSMutableDictionary *dictionary = [ [ NSMutableDictionary alloc ] initWithDictionary: [ self getDictionary: className ] copyItems: YES ];
+    
+    if( ![ className isEqualToString: BaseClassName ] ) [ dictionary addEntriesFromDictionary: [ self getDictionary: BaseClassName ] ];
+    return dictionary;
+
 }
 
 - ( void )setDataWithDictionary: ( NSDictionary* )dictionary{
@@ -102,15 +122,6 @@ NSString* const KeyAIDDataSecurityCode  = @"securityCode";
     return copyObj;
 }
 
-- ( NSDictionary* )dictionaryRepresentation{
-    NSMutableDictionary *dictionary = [ [ NSMutableDictionary alloc ] initWithDictionary: [ super dictionaryRepresentation ] ];
-    [ dictionary addEntriesFromDictionary: @{ KeyAIDDataName:    self.name,
-                                              KeyAIDDataZIP:     self.zip,
-                                              KeyAIDDataPhone:   self.phone,
-                                              KeyAIDDataEmail:   self.email } ];
-    return dictionary;
-}
-
 @end
 
 #pragma mark AIDDataApplication
@@ -135,14 +146,6 @@ NSString* const KeyAIDDataSecurityCode  = @"securityCode";
     copyObj.name    = self.name;
     copyObj.active  = self.active;
     return copyObj;
-}
-
-- ( NSDictionary* )dictionaryRepresentation{
-    NSMutableDictionary *dictionary = [ [ NSMutableDictionary alloc ] initWithDictionary: [ super dictionaryRepresentation ] ];
-    
-    [ dictionary addEntriesFromDictionary: @{ KeyAIDDataName:    self.name,
-                                              KeyAIDDataActive:  self.active } ];
-    return dictionary;
 }
 
 @end
@@ -183,18 +186,6 @@ NSString* const KeyAIDDataSecurityCode  = @"securityCode";
     return copyObj;
 }
 
-- ( NSDictionary* )dictionaryRepresentation{
-    NSMutableDictionary *dictionary = [ [ NSMutableDictionary alloc ] initWithDictionary: [ super dictionaryRepresentation ] ];
-    
-    [ dictionary addEntriesFromDictionary: @{ KeyAIDDataAnchorId:    self.anchorId,
-                                              KeyAIDDataConsumerId:  self.consumerId,
-                                              KeyAIDDataUUID:        self.uuid,
-                                              KeyAIDDataStatus:      self.status,
-                                              KeyAIDDataOS:          self.os,
-                                              KeyAIDDataEndpointArn: self.endpointArn } ];
-    return dictionary;
-}
-
 @end
 
 #pragma mark AIDDataTransaction
@@ -228,17 +219,6 @@ NSString* const KeyAIDDataSecurityCode  = @"securityCode";
     copyObj.status      = self.status;
     copyObj.securityCode= self.securityCode;
     return copyObj;
-}
-
-- ( NSDictionary* )dictionaryRepresentation{
-    NSMutableDictionary *dictionary = [ [ NSMutableDictionary alloc ] initWithDictionary: [ super dictionaryRepresentation ] ];
-    
-    [ dictionary addEntriesFromDictionary: @{ KeyAIDDataRecordId:        self.recordId,
-                                              KeyAIDDataConsumerId:      self.consumerId,
-                                              KeyAIDDataClientAppId:     self.clientAppId,
-                                              KeyAIDDataStatus:          self.status,
-                                              KeyAIDDataSecurityCode:    self.securityCode } ];
-    return dictionary;
 }
 
 @end

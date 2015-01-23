@@ -30,8 +30,8 @@
     AIDDataApplication *a1 = [ AIDDataApplication new ];
     AIDDataApplication *a2 = [ AIDDataApplication new ];
 
-    [ a1 dataWithDictionary: @{ KeyAIDDataName: @"app1", KeyAIDDataActive: @"active" } ];
-    [ a2 dataWithDictionary: @{ KeyAIDDataName: @"app2", KeyAIDDataActive: @"non active" } ];
+    [ a1 setDataWithDictionary: @{ KeyAIDDataID: @"1", KeyAIDDataName: @"app1", KeyAIDDataActive: @"active" } ];
+    [ a2 setDataWithDictionary: @{ KeyAIDDataName: @"app2", KeyAIDDataActive: @"non active" } ];
     [ self.dataManager.applications addObject: a1 ];
     [ self.dataManager.applications addObject: a2 ];
 //    NSLog( @"%@", self.dataManager.applications );
